@@ -1,4 +1,4 @@
-## Exercise that is solved in it:
+## Exercise:
 
 Please complete the ERC20 token with following extensions;
 - Capped Token: Minting token should not be exceed from Capped limit.
