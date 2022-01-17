@@ -6,6 +6,8 @@ import "./Safemath.sol";
 contract MyToken is IERC20 {
     using SafeMath for uint256;
 
+    uint256 timeTillTransactionLock;
+
     // Mapping hold balances against EOA.
     mapping(address => uint256) private _balances;
 
@@ -55,6 +57,23 @@ contract MyToken is IERC20 {
     {
         _totalSupply += amount;
         return _totalSupply;
+    }
+
+    // timebound function
+    function lockTransferUntil(uint256 time) public {
+        require(
+            time > 0 && time < block.timestamp,
+            "Time must be greater than current time. "
+        );
+        timeTillTransactionLock = time;
+    }
+
+    function _beforeTokenTransfer(address to, uint256 amount) public {
+        require(
+            timeTillTransactionLock < block.timestamp,
+            "Sorry, token is locked"
+        );
+        transfer(to, amount);
     }
 
     // returning totalsupply remaining in contract
